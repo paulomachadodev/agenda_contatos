@@ -1,0 +1,44 @@
+﻿@{
+    //definir a página de layout utilizada
+    Layout = "~/Views/Shared/_AccountLayout.cshtml";
+}
+
+<div class="card-body">
+
+    <div class="text-center mb-3">
+
+         <img src="https://www.cotiinformatica.com.br/imagens/logo-coti-informatica.png" class="img-fluid"/>
+
+         <h5>Acesso ao Sistema</h5>
+         <p>Entre com suas credenciais para acessar a agenda.</p>
+
+    </div>
+
+    <form>
+
+        <div class="mb-3">
+            <label>Entre com seu email de acesso:</label>
+            <input type="text" class="form-control" id="email" placeholder="email@dominio.com"/>
+        </div>
+
+        <div class="mb-3">
+            <label>Entre com sua senha de acesso:</label>
+            <input type="password" class="form-control" id="password" placeholder="********"/>
+            <div class="text-end">
+                <a href="/Account/PasswordRecover">Esqueci minha senha.</a>
+            </div>
+        </div>
+
+        <div class="mb-3 d-grid">
+            <input type="submit" class="btn btn-success" value="Acessar Agenda"/>
+        </div>
+
+         <div class="mb-3 d-grid">
+            <a href="/Account/Register" class="btn btn-primary">
+                Não possui conta? <strong>Cadastre-se aqui!</strong>
+            </a>
+        </div>
+
+    </form>
+
+</div>

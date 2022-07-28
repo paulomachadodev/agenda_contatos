@@ -1,0 +1,49 @@
+﻿@{
+    //definir a página de layout utilizada
+    Layout = "~/Views/Shared/_AccountLayout.cshtml";
+}
+
+<div class="card-body">
+
+    <div class="text-center mb-3">
+
+         <h3>Cadastro de Conta de Usuário</h3>
+         <p>Entre com os seus dados para criar uma conta.</p>
+
+    </div>
+
+    <form>
+
+        <div class="mb-3">
+            <label>Entre com seu nome:</label>
+            <input type="text" class="form-control" id="nome" placeholder="seu nome aqui"/>
+        </div>
+
+        <div class="mb-3">
+            <label>Entre com seu email:</label>
+            <input type="text" class="form-control" id="email" placeholder="mail@dominio.com"/>
+        </div>
+
+        <div class="mb-3">
+            <label>Entre com sua senha:</label>
+            <input type="password" class="form-control" id="senha" placeholder="********"/>
+        </div>
+
+        <div class="mb-3">
+            <label>Confirm a sua senha:</label>
+            <input type="password" class="form-control" id="confsenha" placeholder="********"/>
+        </div>
+
+        <div class="mb-3 d-grid">
+            <input type="submit" class="btn btn-success" value="Realizar Cadastro"/>
+        </div>
+
+         <div class="mb-3 d-grid">
+            <a href="/Account/Login" class="btn btn-primary">
+                Já possui conta? <strong>Acesse aqui!</strong>
+            </a>
+        </div>
+
+    </form>
+
+</div>
