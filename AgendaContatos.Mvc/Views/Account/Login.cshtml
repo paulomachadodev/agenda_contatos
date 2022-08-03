@@ -1,4 +1,7 @@
-﻿@{
+﻿@** declarando a classe de modelo de dados para esta página *@
+@model AgendaContatos.Mvc.Models.AccountLoginModel
+
+@{
     //definir a página de layout utilizada
     Layout = "~/Views/Shared/_AccountLayout.cshtml";
 }
@@ -14,16 +17,23 @@
 
     </div>
 
-    <form>
+    @** Declarando o formulário *@
+    @using (Html.BeginForm()){
 
         <div class="mb-3">
             <label>Entre com seu email de acesso:</label>
-            <input type="text" class="form-control" id="email" placeholder="email@dominio.com"/>
+            @Html.TextBoxFor(model => model.Email, new { @class = "form-control"})
+             <div class="text-danger">
+                @Html.ValidationMessageFor(model => model.Email)
+            </div>
         </div>
 
         <div class="mb-3">
             <label>Entre com sua senha de acesso:</label>
-            <input type="password" class="form-control" id="password" placeholder="********"/>
+            @Html.PasswordFor(model => model.Senha, new { @class = "form-control" })
+             <div class="text-danger">
+                @Html.ValidationMessageFor(model => model.Senha)
+            </div>
             <div class="text-end">
                 <a href="/Account/PasswordRecover">Esqueci minha senha.</a>
             </div>
@@ -39,6 +49,8 @@
             </a>
         </div>
 
-    </form>
-
+        <div class="text-center">
+            <strong>@TempData["Mensagem"]</strong>
+        </div>
+    }
 </div>

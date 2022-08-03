@@ -34,5 +34,38 @@ namespace AgendaContatos.Data.Repositories
                 connection.Execute(sql, usuario);
             }
         }
+        //método para consultar 1 usuário baseado no email
+        public Usuario GetByEmail(string email)
+        {
+            var sql = @"
+                SELECT * FROM USUARIO
+                WHERE EMAIL = @email
+
+            ";
+
+            using (var connection = new SqlConnection(SqlServerConfiguration.GetConnectionString()))
+            {
+                return connection
+                    .Query<Usuario>(sql, new { email })
+                    .FirstOrDefault();
+            }
+        }
+
+        //método para consultar 1 usuário baseado no email e senha
+        public Usuario GetByEmailAndSenha(string email, string senha)
+        {
+            var sql = @"
+                SELECT * FROM USUARIO
+                WHERE EMAIL = @email       
+                AND SENHA = CONVERT(VARCHAR(32), HASHBYTES('MD5', @Senha), 2)
+            ";
+
+            using (var connection = new SqlConnection(SqlServerConfiguration.GetConnectionString()))
+            {
+                return connection
+                    .Query<Usuario>(sql, new { email, senha })
+                    .FirstOrDefault();
+            }
+        }
     }
 }
