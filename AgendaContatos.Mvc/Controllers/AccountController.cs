@@ -1,7 +1,11 @@
 ﻿using AgendaContatos.Data.Entities;
 using AgendaContatos.Data.Repositories;
 using AgendaContatos.Mvc.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.Security.Claims;
 
 namespace AgendaContatos.Mvc.Controllers
 {
@@ -28,6 +32,22 @@ namespace AgendaContatos.Mvc.Controllers
                     //verificar se o usuário foi encontrado
                     if (usuario != null)
                     {
+                        //Gravar os dados do usuário autenticado em um arquivo de cookie do AspNet
+                        //este cookie de autenticação é que fará com que o AspNet saiba diferenciar
+                        //um usuário autenticado de um usuário não autenticado
+                        var authenticationModel = new AuthenticationModel();
+                        authenticationModel.idUsuario = usuario.IdUsuario;
+                        authenticationModel.Nome = usuario.Nome;
+                        authenticationModel.Email = usuario.Email;
+                        authenticationModel.DataHoraAcesso = DateTime.Now;
+
+                        //para gravar os dados do objeto no Cookie do AspNet precisamos
+                        //serializar este objeto em formato JSON
+                        var json = JsonConvert.SerializeObject(authenticationModel);
+
+                        //Autenticar o usuário!!
+                        GravarCookieDeAutenticacao(json);
+
                         //redirecionando para outra página
                         return RedirectToAction("Consulta", "Contatos");
                     }
@@ -127,5 +147,32 @@ namespace AgendaContatos.Mvc.Controllers
 
             return View();
         }
+
+        //ROTA: /Account/Logout
+        public IActionResult Logout()
+        {
+            //Apagando o Cookie de autenticação do usuário
+            RemoverCookieDeAutenticacao();
+
+            //Redirecionar o usuário de volta para a página de login
+            return RedirectToAction("Login", "Account");
+        }
+
+        //método para gravar o cookie de autenticação do usuário
+        public void GravarCookieDeAutenticacao(string json)
+        {
+            var claimsIdentity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, json) }, CookieAuthenticationDefaults.AuthenticationScheme);
+
+            //gravando o cookie de autenticação
+            var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+            HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+        }
+
+        //método para apagar o Cookie de autenticação do usuário
+        public void RemoverCookieDeAutenticacao()
+        {
+            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        }
+
     }
 }

@@ -13,5 +13,8 @@ namespace AgendaContatos.Data.Entities
         public string Email { get; set; }
         public string Senha { get; set; }
         public DateTime DataCadastro { get; set; }
+
+        //relacionamentos (assiciações)
+        public List<Contato> Contatos { get; set; }
     }
 }

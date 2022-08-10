@@ -44,7 +44,7 @@
 
         <div class="mb-3">
             <label>Confirme a sua senha:</label>
-            @Html.PasswordFor(model => model.SenhaConfirmacao, new { @class = "form-control" })
+            @Html.PasswordFor(model => model.SenhaConfirmacao, new { @class = "form-control"} )
              <div class="text-danger">
                 @Html.ValidationMessageFor(model => model.SenhaConfirmacao)
             </div>

@@ -1,0 +1,47 @@
+﻿@** Modelo de dados da página de consulta de contatos *@
+@model List<AgendaContatos.Mvc.Models.ContatosConsultaModel>
+
+@{
+    Layout = "~/Views/Shared/_ContatosLayout.cshtml";
+}
+
+<h5>Consulta de contatos</h5>
+<p>Listagem de contatos cadastrados em sua agenda</p>
+<hr/>
+
+<table class="table table-sm table-hover">
+    <thead>
+        <tr>
+            <th>Nome do contato</th>
+            <th>Telefone</th>
+            <th>Email</th>
+            <th>Data de Nascimento</th>
+            <th>Idade</th>
+            <th>Operações</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>
+                <a href="/Contatos/Edicao" class="btn btn-sm btn-primary">
+                    Editar
+                </a>
+                <a href="#" class="btn btn-sm btn-danger">
+                    Excluir
+                </a>
+            </td>
+        </tr>
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="6">
+                Quantidade de contatos: 0
+            </td>
+        </tr>
+    </tfoot>
+</table>
