@@ -1,13 +1,10 @@
 ﻿@using AgendaContatos.Mvc.Models
-@using Newtonsoft.Json
+@using Newtonsoft.Json;
 
 @{
     Layout = null;
 
-    //ler os dados gravados no Cookie de autenticação do AspNet
-    var json = User.Identity.Name;
-
-    //deserializando os dados de jason para objeto
+    var json = User.Identity.Name; //dados gravados no Cookie de autenticação do AspNet
     var authenticationModel = JsonConvert.DeserializeObject<AuthenticationModel>(json);
 }
 
@@ -22,6 +19,9 @@
     <!-- folha de estilos CSS do bootstrap -->
     <link rel="stylesheet" href="~/css/bootstrap.css" />
 
+    <!-- folha de estilos CSS do datatables -->
+    <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+
 </head>
 <body>
 
@@ -34,14 +34,23 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/Contatos/Cadastro">Cadastrar Contatos</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Gerenciar Contatos
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/Contatos/Cadastro">Cadastrar contatos</a></li>
+                            <li><a class="dropdown-item" href="/Contatos/Consulta">Consultar contatos</a></li>
+                        </ul>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/Contatos/Consulta">Consultar Contatos</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/Usuarios/Dados">Dados do Usuário</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Minha Conta
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/Usuarios/Dados">Dados do usuário</a></li>
+                            <li><a class="dropdown-item" href="/Usuarios/AlterarSenha">Alterar senha de acesso</a></li>
+                        </ul>
                     </li>
                 </ul>
                 <form class="d-flex">
@@ -67,14 +76,37 @@
         </div>
     </nav>
 
+    <!-- local para exibição de mensagens -->
+    @if (TempData["Mensagem"] != null)
+    {
+        <div class="alert alert-secondary alert-dismissible fade show" role="alert">
+            <strong>@TempData["Mensagem"]</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
     <!-- área principal da página -->
-    <div class="container mt-3">
+    <div class="container mt-3 mb-5">
         <!-- local para entrada do conteudo das demais páginas -->
         @RenderBody()
     </div>
 
     <!-- arquivo JS do bootstrap -->
-    <script src="~/js/bootstrap.js"></script>
+    <script src="~/js/bootstrap.bundle.js"></script>
+
+    <!-- arquivo JS do JQuery e DataTables -->
+    <script src="~/js/jquery-3.6.0.min.js"></script>
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(document).ready( function () {
+            $('#tabela').DataTable({
+                language: {
+		            url: '//cdn.datatables.net/plug-ins/1.10.24/i18n/Portuguese-Brasil.json'
+		        }
+            });
+        });
+    </script>
 
 </body>
 </html>

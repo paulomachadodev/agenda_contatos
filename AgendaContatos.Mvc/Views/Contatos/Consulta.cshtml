@@ -7,9 +7,9 @@
 
 <h5>Consulta de contatos</h5>
 <p>Listagem de contatos cadastrados em sua agenda</p>
-<hr/>
+<hr />
 
-<table class="table table-sm table-hover">
+<table id="tabela" class="table table-sm table-hover">
     <thead>
         <tr>
             <th>Nome do contato</th>
@@ -21,27 +21,26 @@
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>
-                <a href="/Contatos/Edicao" class="btn btn-sm btn-primary">
-                    Editar
-                </a>
-                <a href="#" class="btn btn-sm btn-danger">
-                    Excluir
-                </a>
-            </td>
-        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Nome</td>
+                <td>@item.Telefone</td>
+                <td>@item.Email</td>
+                <td>@item.DataNascimento</td>
+                <td>@item.Idade</td>
+                <td>
+                    <a href="/Contatos/Edicao" class="btn btn-sm btn-primary">
+                        Editar
+                    </a>
+                    <a href="/Contatos/Exclusao/@item.IdContato" onclick="return confirm('Deseja excluir o contato @item.Nome?')" class="btn btn-sm btn-danger">
+                        Excluir
+                    </a>
+                </td>
+            </tr>
+        }
+
     </tbody>
-    <tfoot>
-        <tr>
-            <td colspan="6">
-                Quantidade de contatos: 0
-            </td>
-        </tr>
-    </tfoot>
 </table>
+

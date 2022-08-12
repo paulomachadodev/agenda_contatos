@@ -34,6 +34,23 @@ namespace AgendaContatos.Data.Repositories
                 connection.Execute(sql, usuario);
             }
         }
+
+        //método para atualizar a senha do usuário
+        public void Update(Guid idUsuario, string novaSenha)
+        {
+            var sql = @"
+                    UPDATE USUARIO 
+                    SET SENHA = CONVERT(VARCHAR(32), HASHBYTES('MD5', @novaSenha), 2)
+                    WHERE IDUSUARIO = @idUsuario
+            ";
+
+            using (var connection = new SqlConnection(SqlServerConfiguration.GetConnectionString()))
+            {
+                connection.Execute(sql, new { idUsuario, novaSenha });
+            }
+
+        }
+
         //método para consultar 1 usuário baseado no email
         public Usuario GetByEmail(string email)
         {

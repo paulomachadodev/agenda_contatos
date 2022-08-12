@@ -53,7 +53,38 @@ namespace AgendaContatos.Mvc.Controllers
         //ROTA: /Contatos/Consulta
         public IActionResult Consulta()
         {
-            return View();
+            var lista = new List<ContatosConsultaModel>();
+
+            try
+            {
+                //capturando os dados do usuário autenticado no projeto
+                var authenticationModel = ObterUsuarioAutenticado();
+
+                //acessando o banco de dados e trazer os contatos do usuário autenticado
+                var contatoRepository = new ContatoRepository();
+                var contatos = contatoRepository.GetByUsuario(authenticationModel.idUsuario);
+
+                //lendo cada contato obtido do banco de dados
+                foreach (var item in contatos)
+                {
+                    var model = new ContatosConsultaModel();
+
+                    model.IdContato = item.IdContato;
+                    model.Nome = item.Nome;
+                    model.Email = item.Email;
+                    model.Telefone = item.Telefone;
+                    model.DataNascimento = item.DataNascimento.ToString("dd/MM/yyyy");
+                    model.Idade = ObterIdade(item.DataNascimento);
+
+                    lista.Add(model);
+                }
+            }
+            catch (Exception e)
+            {
+                TempData["Mensagem"] = $"Falha ao consultar contatos: {e.Message}.";
+            }
+
+            return View(lista);
         }
 
         //ROTA: /Contatos/Edicao
@@ -73,13 +104,45 @@ namespace AgendaContatos.Mvc.Controllers
             return View();
         }
 
+        //ROTA: /COntatos/Exclusao/id
+        public IActionResult Exclusao(Guid id)
+        {
+            try
+            {
+                var contato = new Contato();
+                contato.IdContato = id;
+
+                //excluindo no banco de dados
+                var contatoRepository = new ContatoRepository();
+                contatoRepository.Delete(contato);
+
+                TempData["Mensagem"] = $"Contato excluído com sucesso.";
+            }
+            catch (Exception e)
+            {
+                TempData["Mensagem"] = $"Falha ao excluir contato: {e.Message}.";
+            }
+
+            //redirecionar de volta para a página de consulta
+            return RedirectToAction("Consulta");
+        }
+
         public AuthenticationModel ObterUsuarioAutenticado()
         {
-            var json = User.Identity.Name; //lendo o conteudo do Cookie de autenticação do AspNet
+            //lendo o conteudo do Cookie de autenticação do AspNet
+            var json = User.Identity.Name;
+
+            //deserializando e retornando o objeto com os dados do usuário
             return JsonConvert.DeserializeObject<AuthenticationModel>(json);
+        }
+
+        public int ObterIdade(DateTime dataNascimento)
+        {
+            var idade = DateTime.Now.Year - dataNascimento.Year;
+            if (DateTime.Now.DayOfYear < dataNascimento.DayOfYear)
+                idade--;
+
+            return idade;
         }
     }
 }
-
-
-
