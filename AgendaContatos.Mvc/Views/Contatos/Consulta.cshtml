@@ -31,10 +31,13 @@
                 <td>@item.DataNascimento</td>
                 <td>@item.Idade</td>
                 <td>
-                    <a href="/Contatos/Edicao" class="btn btn-sm btn-primary">
+                    <a href="/Contatos/Edicao/@item.IdContato" 
+                    class="btn btn-sm btn-primary">
                         Editar
                     </a>
-                    <a href="/Contatos/Exclusao/@item.IdContato" onclick="return confirm('Deseja excluir o contato @item.Nome?')" class="btn btn-sm btn-danger">
+                    <a href="/Contatos/Exclusao/@item.IdContato" 
+                    onclick="return confirm('Deseja excluir o contato @item.Nome?');" 
+                    class="btn btn-sm btn-danger">
                         Excluir
                     </a>
                 </td>

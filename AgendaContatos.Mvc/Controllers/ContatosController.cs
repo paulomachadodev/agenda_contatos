@@ -87,10 +87,34 @@ namespace AgendaContatos.Mvc.Controllers
             return View(lista);
         }
 
-        //ROTA: /Contatos/Edicao
-        public IActionResult Edicao()
+        //ROTA: /Contatos/Edicao/{id}
+        public IActionResult Edicao(Guid id)
         {
-            return View();
+            var model = new ContatosEdicaoModel();
+
+            try
+            {
+                //capturar o usuário autenticado no sistema
+                var authenticationModel = ObterUsuarioAutenticado();
+
+                //consultar o contato no banco de dados
+                var contatoRepository = new ContatoRepository();
+                var contato = contatoRepository.GetById(id, authenticationModel.idUsuario);
+
+                //preencher a classe model com os dados do contato
+                model.IdContato = contato.IdContato;
+                model.Nome = contato.Nome;
+                model.Email = contato.Email;
+                model.Telefone = contato.Telefone;
+                model.DataNascimento = contato.DataNascimento.ToString("yyyy-MM-dd");
+            }
+            catch (Exception e)
+            {
+                TempData["Mensagem"] = e.Message;
+            }
+
+            //enviando o modelo de dados para a página
+            return View(model);
         }
 
         [HttpPost] //método para receber o submit do formulário
@@ -98,13 +122,31 @@ namespace AgendaContatos.Mvc.Controllers
         {
             if (ModelState.IsValid)
             {
+                try
+                {
+                    var contato = new Contato();
 
+                    contato.IdContato = model.IdContato;    
+                    contato.Nome = model.Nome;  
+                    contato.Email = model.Email;
+                    contato.Telefone = model.Telefone;
+                    contato.DataNascimento = DateTime.Parse(model.DataNascimento);
+
+                    var contatoRepository = new ContatoRepository();
+                    contatoRepository.Update(contato);
+
+                    TempData["Mensagem"] = $"Contato {contato.Nome}, atualizado com sucesso.";
+                }
+                catch (Exception e)
+                {
+                    TempData["Mensagem"] = e.Message;
+                }
             }
 
-            return View();
+            return View(model);
         }
 
-        //ROTA: /COntatos/Exclusao/id
+        //ROTA: /Contatos/Exclusao/{id}
         public IActionResult Exclusao(Guid id)
         {
             try
